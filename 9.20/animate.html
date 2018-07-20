@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style type="text/css">
+body, div, span {
+	margin: 0;
+	padding: 0;
+}
+#div1 {
+	width: 200px;
+	height: 200px;
+	background: red;
+	position: relative;
+	left: -200px;
+	top: 0;
+}
+#div1 span {
+	width: 20px;
+	height: 50px;
+	background: blue;
+	position: absolute;
+	left: 200px;
+	top: 75px;
+}
+</style>
+</head>
+
+<body>
+<script>
+window.onload=function(){
+	var div=document.getElementById("div1");
+	div.onmouseover=function(){move(0);}
+	div.onmouseout=function(){move(-200);}
+}
+var timer=null;
+function move(target){
+	clearInterval(timer);
+	var speed=null;
+	var div=document.getElementById("div1");
+	timer=setInterval(function(){
+		if(div.offsetLeft>target){
+			speed=-10;	
+		}else{
+			speed=10;	
+		}
+		if(div.offsetLeft==target){
+			clearInterval(timer);
+		}else{
+			div.style.left=div.offsetLeft+speed+'px';	
+		}
+	},30);	
+}
+/*function move1(){
+	clearInterval(timer);
+	var div=document.getElementById("div1");
+	timer=setInterval(function(){
+		if(div.offsetLeft==-200){
+			clearInterval(timer);
+		}else{
+			div.style.left=div.offsetLeft-10+'px';	
+		}
+	},30);	
+}*/
+</script>
+<div id="div1"> <span id="share">分享</span> </div>
+</body>
+</html>

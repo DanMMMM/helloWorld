@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Observer</title>
+    <script type="text/javascript">
+        window.onload = function() {
+            var Observer = (function(){
+                var __message = {};
+                return {
+                    regist : function(type, fn){
+                        if(typeof __message[type] === 'undefined'){
+                            __message[type] = [fn];
+                        }else{
+                            __message[type].push(fn);
+                        }
+                    },
+                    fire : function(type, args){
+                        if(!__message[type]) return;
+                        var events = {
+                            type : type,
+                            args : args || {}
+                        };
+                        for (var i = 0; i < __message[type].length; i++) {
+                            __message[type][i].call(this,events);
+                        }
+                    },
+                    remove : function(type, fn){
+                        if(__message[type] instanceof Array){
+                            for (var i = __message[type].length - 1; i >= 0; i--) {
+                                __message[type][i] === fn && __message[type].splice(i,1);
+                            }
+                        }
+                    }
+                }
+            })();
+            // Observer.regist('test', function(e){
+            //     console.log(e.type, e.args.msg);
+            // });
+            // Observer.fire('test',{msg: '传递参数'});
+            (function(){
+                function addMsgItem(e){
+                    var text = e.args.text,
+                        ul = document.getElementById('msg'),
+                        li = document.createElement('li'),
+                        span = document.createElement('span');
+                    li.innerHTML = text;
+                    span.onclick = function(){
+                        ul.removeChild(li);
+                        Observer.fire('removeCommentMessage',{num : -1});
+                    }
+                    li.appendChild(span);
+                    ul.appendChild(li);
+                }
+                Observer.regist('addCommentMessage',addMsgItem);
+            })();
+            (function(){
+                function changeMsgNum(e){
+                    var num = e.args.num;
+                    document.getElementById('msg_num').innerHTML = parseInt(document.getElementById('msg_num').innerHTML) + num;
+                }
+                Observer.regist('addCommentMessage',changeMsgNum);
+                Observer.regist('removeCommentMessage',changeMsgNum);
+            })();
+            (function(){
+                document.getElementById('user_submit').onclick = function(){
+                    var text = document.getElementById('user_input');
+                    if(text.value === ''){
+                        return;
+                    }
+                    Observer.fire('addCommentMessage',{text:text.value,num:1});
+                    text.value = '';
+                }
+            })();
+        }
+    </script>
+</head>
+<body>
+<ul id="msg"></ul>
+<div id="msg_num">0</div>
+<textarea id="user_input" style="width: 200px;height: 200px;"></textarea>
+<div id="user_submit" style="width: 100px;height: 40px;line-height: 40px;background-color: #399;color: #fff;cursor: pointer;">submit</div>
+</body>
+</html>

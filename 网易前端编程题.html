@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web_front_end</title>
+    <script src="./jquery-1.9.1.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <script type="text/javascript">
+        $(function() {
+            const timeout = ms => new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve();
+                }, ms);
+            });
+
+            const ajax1 = () => timeout(2000).then(() => {
+                console.log('1');
+                return 1;
+            });
+
+            const ajax2 = () => timeout(1000).then(() => {
+                console.log('2');
+                return 2;
+            });
+
+            const ajax3 = () => timeout(2000).then(() => {
+                console.log('3');
+                return 3;
+            });
+
+            const mergePromise = ajaxArray => {
+                return new Promise(function(resolve,reject){
+                  var original = Promise.resolve(timeout);
+                  var data = Promise.resolve(original);
+                  resolve(data);
+                });
+            };
+
+            mergePromise([ajax1, ajax2, ajax3]).then(data => {
+                console.log('done');
+                console.log(data); // data 为 [1, 2, 3]
+            });
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

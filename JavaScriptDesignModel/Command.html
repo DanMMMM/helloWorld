@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Command</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            var ViewCommand = (function(){
+                var tpl = {
+                    product : [
+                        '<div>',
+                            '<img src="{#src#}" />',
+                            '<p>{#text#}</p>',
+                        '</div>'
+                    ].join(''),
+                    title : [
+                        '<div class="title">',
+                            '<div class="main">',
+                                '<h2>{#title#}</h2>',
+                                '<p>{#tips#}</p>',
+                            '</div>',
+                        '</div>',
+                    ].join('')
+                },
+                html = '';
+                function formateString(str, obj){
+                    return str.replace(/\{#(\w+)#\}/g,function(match, key){
+                        return obj[key];
+                    })
+                }
+                var Action = {
+                    create : function(data, view){
+                        if(!view){
+                            var arg = arguments[0];
+                            var data = arg[0];
+                            var view = arg[1];
+                        }
+                        if(data.length){
+                            for (var i = 0; i < data.length; i++) {
+                                html += formateString(tpl[view], data[i]);
+                            }
+                        }else{
+                            html += formateString(tpl[view],data);
+                        }
+                    },
+                    display : function(){
+                        var container = arguments[0][0];
+                        var data = arguments[0][1];
+                        var view = arguments[0][2];
+                        if(data){
+                            this.create(data,view);
+                        }
+                        document.getElementById(container).innerHTML = html;
+                        html = '';
+                    }
+                }
+                return function excute(msg){
+                    msg.param = Object.prototype.toString.call(msg.param) === "[Object Array]" ? msg.param : [msg.param];
+                    Action[msg.command].apply(Action, msg.param);
+                }
+            })();
+            var productData = [
+                {
+                    src : '../images/picture1.png',
+                    text : '绽放的桃花'
+                },
+                {
+                    src : '../images/picture2.png',
+                    text : '阳光下的温馨'
+                },
+                {
+                    src : '../images/picture3.png',
+                    text : '镜头前的绿色'
+                }
+            ],
+            titleData = {
+                title : '夏日里的一篇温馨',
+                tips : '暖暖的温泉带给人们假的感受'
+            };
+            ViewCommand({
+                command : 'display',
+                param : ['title', titleData , 'title']
+            });
+            ViewCommand({
+                command : 'create',
+                param : [{
+                    src : '../images/picture4.png',
+                    text : '迎着朝阳的野菊花'
+                }, 'product']
+            });
+            ViewCommand({
+                command : 'display',
+                param : ['product', productData, 'product']
+            });
+
+            var Visitor = (function(){
+                return {
+                    splice : function(){
+                        var args = Array.prototype.splice.call(arguments,1);
+                        return Array.prototype.splice.apply(arguments[0], args);
+                    },
+                    push : function(){
+                        var len  = arguments[0].length || 0;
+                        var args = this.splice(arguments, 1);
+                        arguments[0].length = len + arguments.length - 1;
+                        return Array.prototype.push.apply(arguments[0], args);
+                    },
+                    pop : function(){
+                        return Array.prototype.pop.apply(arguments[0]);
+                    }
+                }
+            })();
+            var a = new Object();
+            console.log(a.length);
+            Visitor.push(a,1,2,3,4);
+            console.log("a.push"+a);
+            Visitor.push(a,4,5,6);
+            console.log("a.push"+a);
+            Visitor.pop(a);
+            console.log("a.pop"+a);
+            Visitor.splice(a,2);
+            console.log("a.pop"+a);
+        }
+    </script>
+</head>
+<body>
+<div id="title"></div>
+<div id="product"></div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SimpleFactory</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            var basketball = function(){
+                this.intro = 'Basketball in American';
+            }
+            basketball.prototype={
+                getMember:function(){
+                    console.log('basketball 5 member');
+                },
+                getBallSize:function(){
+                    console.log('basketball is big');
+                }
+            }
+            var football = function(){
+                this.intro = "football in world";
+            }
+            football.prototype = {
+                getMember:function(){
+                    console.log('football 11 member');
+                },
+                getBallSize:function(){
+                    console.log('football is big');
+                }
+            }
+            var tennis = function(){
+                this.intro = "tennis in world";
+            }
+            tennis.prototype = {
+                getMember:function(){
+                    console.log('tennis 1 member');
+                },
+                getBallSize:function(){
+                    console.log('tennis is small');
+                }
+            }
+            var SportsFactory = function(name){
+                switch(name){
+                    case 'NBA':
+                        return new basketball();
+                    case 'wordCup':
+                        return new football();
+                    case 'FrenchOpen':
+                        return new tennis();
+                }
+            }
+            var sports = SportsFactory('NBA');
+            console.log(sports);
+            console.log(sports.intro);
+            console.log(sports.getMember);
+
+            function getfu(content,type){
+                var o = new Object();
+                o.intro = content;
+                o.diff = function(){
+                    console.log('there is ball');
+                }
+                if(type == 'NBA'){
+                    o.getMember = function(){
+                        console.log('basketball 5 member');
+                    }
+                }else if(type == 'wordCup'){
+                    o.getMember = function(){
+                        console.log('football 11 member');
+                    }
+                }else if(type == 'FrenchOpen'){
+                    o.getMember = function(){
+                        console.log('tennis 1 member');
+                    }
+                }
+                return o;
+            }
+            var sports1 = getfu('basketball in American','NBA');
+            console.log(sports1.intro);
+            console.log(sports1.diff);
+            console.log(sports1.getMember);
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>

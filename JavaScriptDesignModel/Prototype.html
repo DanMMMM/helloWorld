@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prototype</title>
+    <script type="text/javascript">
+        window.onload = function() {
+            var LoopImages = function(imgArr, container){
+                this.imagesArr = imgArr;
+                this.container = container;
+            }
+            LoopImages.Prototype = {
+                createImage : function(){
+                    console.log('LoopImages createImage function');
+                },
+                changeImage : function(){
+                    console.log('LoopImages changeImage function');
+                }
+            }
+            var SlideLoopImg = function(imgArr,container){
+                LoopImages.call(this,imgArr,container);
+            }
+            SlideLoopImg.prototype = new LoopImages();
+            SlideLoopImg.prototype.changeImage = function(){
+                console.log('SlideLoopImg changeImage function');
+            }
+
+            var FadeLoopImg = function(imgArr,container,arrow){
+                LoopImages.call(this,imgArr,container);
+                this.arrow = arrow;
+            }
+            FadeLoopImg.prototype = new LoopImages();
+            FadeLoopImg.prototype.changeImage = function(){
+                console.log('FadeLoopImg changeImage function');
+            }
+            var fadeImg = new FadeLoopImg([01.jpg,02.jpg,03.jpg,04.jpg],'slide',['left.jpg','right.jpg']);
+            fadeImg.changeImage();
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>

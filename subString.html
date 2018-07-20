@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript">
+        window.onload = function() {
+            var str = 'abc';
+            var arr = new Array(str.length);
+            getAllSubStrings(str,0,str.length,arr);
+            //getAllSeqSubStrings('abcde');
+        }
+        function getAllSubStrings(str,start,end,arr){
+            var result = "";
+            if(start == end){//当start==end时，即集合中的所有元素都已经在或者不在该子集中，输出该子集后，return跳出该层递归。
+                for (var i = 0; i < end; i++) {
+                    if(arr[i] == 1){
+                        result += str.charAt(i);
+                    }
+                }
+                console.log(result);
+                return;
+            }else{
+                arr[start] = 0;//代表数组中索引为start的元素不在该子集中
+                getAllSubStrings(str, start + 1, end, arr);
+                arr[start] = 1;
+                getAllSubStrings(str, start + 1, end, arr);
+            }
+        }
+    function getAllSeqSubStrings(str){
+        if(str.length == 0){
+            return;
+        }else{
+            for (var i = 0; i < str.length; i++) {
+                for (var j = i; j < str.length - 1; j++) {
+                    console.log(str.substring(i,i+j));
+                }
+            }
+        }
+    }
+    </script>
+</head>
+<body>
+
+</body>
+</html>
